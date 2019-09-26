@@ -19,11 +19,17 @@ local bcommands = {
   [1] = "Event",
   [2] = "Event Cancel",
   [4] = "Write",
+  [5] = "Obsolete - CA_PROTO_SNAPSHOT",
   [6] = "Search",
+  [7] = "Obsolete - CA_PROTO_BUILD",
+  [8] = "CA_PROTO_EVENTS_OFF",
+  [9] = "CA_PROTO_EVENTS_ON",
+  [0x0a] = "CA_PROTO_READ_SYNC",
   [0x0b] = "Error",
   [0x0c] = "Clear Channel",
   [0x0d] = "Beacon",
   [0x0f] = "Read Notify",
+  [0x10] = "Obsolete - CA_PROTO_READ_BUILD",
   [0x11] = "Repeater Confirm",
   [0x12] = "Create Channel",
   [0x13] = "Write Notify",
@@ -586,9 +592,9 @@ local function parse_dbr (buf, pkt, t, dcount, data_type)
     local flen = field_sizes[mfld]
     if mfld == timestamp then
       -- special handling for timestamp
-      local st = t:add(timestamp, buf(offset, flen)):set_text("Timestamp: "..os.date("%c", buf(offset+0, 4):uint()+631152000))
-      st:add(timestamp_sec , buf(offset+0, 4))
-      st:add(timestamp_nsec, buf(offset+4, 4))
+      st = t:add(timestamp, buf(offset, flen)):set_text("Timestamp: "..os.date("%a %d %Y %X", buf(offset+0, 4):uint()+     631152000))
+      t:add(timestamp_sec, buf(offset+0, 4))
+      t:add(timestamp_nsec, buf(offset+4, 4))
     else
       t:add(mfld, buf(offset, flen))
     end
